@@ -54,12 +54,6 @@ module.exports = (grunt) ->
 				]
 				options: '<%= coffee.scripts.options %>'
 
-		connect:
-			livereload:
-				options:
-					base: './dist/'
-					middleware: require './middleware'
-					port: 0
 
 		# Copies directories and files from one location to another.
 		copy:
@@ -110,8 +104,6 @@ module.exports = (grunt) ->
 					]
 					dest: './dist/'
 					expand: true
-				,
-					'./dist/index.html': './.temp/index.min.html'
 				]
 			# Task is run when the watched index.template file is modified.
 			index:
@@ -178,15 +170,6 @@ module.exports = (grunt) ->
 				files:
 					'./.temp/styles/styles.css': './src/styles/styles.less'
 
-		# Minifiy index.html.
-		# Extra white space and comments will be removed.
-		# Content within <pre /> tags will be left unchanged.
-		# IE conditional comments will be left unchanged.
-		# As of this writing, the output is reduced by over 14%.
-		minifyHtml:
-			prod:
-				files:
-					'./.temp/index.min.html': './.temp/index.html'
 
 		# Gathers all views and creates a file to push views directly into the $templateCache
 		# This will produce a file with the following content.
@@ -206,11 +189,6 @@ module.exports = (grunt) ->
 					'./.temp/scripts/views.js': './.temp/views/**/*.html'
 				options:
 					trim: './.temp'
-
-		# Open the Express app in the default browser
-		open:
-			server:
-				url: 'http://localhost:<%= connect.livereload.options.port %>'
 
 		# Restart server when server sources have changed, notify all browsers on change.
 		regarde:
@@ -242,9 +220,6 @@ module.exports = (grunt) ->
 					'template:views'
 					'copy:views'
 				]
-			# routes:
-			# 	files: 'routes.coffee'
-			# 	tasks: 'livereload'
 
 		# RequireJS optimizer configuration for both scripts and styles.
 		# This configuration is only used in the 'prod' build.
@@ -349,16 +324,6 @@ module.exports = (grunt) ->
 		'karma'
 	]
 
-	# Starts a web server
-	# Enter the following command at the command line to execute this task:
-	# grunt server
-	grunt.registerTask 'server', [
-		'livereload-start'
-		'connect'
-		'open'
-		'regarde'
-	]
-
 	# Compiles all CoffeeScript files in the project to JavaScript then deletes all CoffeeScript files.
 	# Used for those that desire plain old JavaScript.
 	# Enter the following command at the command line to execute this build task:
@@ -403,6 +368,6 @@ module.exports = (grunt) ->
 		'ngTemplateCache'
 		'requirejs'
 		'template:prod'
-		'minifyHtml'
 		'copy:prod'
+		'copy:index'
 	]
