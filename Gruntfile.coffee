@@ -188,7 +188,7 @@ module.exports = (grunt) ->
 				files:
 					'./.temp/scripts/views.js': './.temp/views/**/*.html'
 				options:
-					trim: './.temp'
+					trim: './.temp/'
 
 		# Restart server when server sources have changed, notify all browsers on change.
 		regarde:
